@@ -16,6 +16,12 @@ namespace AoC_T1
 
         private static int CalcFuelRequirementSpacecraft(IEnumerable<int> massArr) => massArr.Sum(CalcFuelRequirementModule);
 
-        private static int CalcFuelRequirementModule(int mass) => (int)Math.Floor((double)mass / 3) - 2;
+        private static int CalcFuelRequirementModule(int mass)
+        {
+            var fuelRequirement = (int) Math.Floor((double) mass / 3) - 2;
+            if (fuelRequirement > 0)
+                return fuelRequirement += CalcFuelRequirementModule(fuelRequirement);
+            return 0;
+        }
     }
 }
