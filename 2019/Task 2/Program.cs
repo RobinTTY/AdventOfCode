@@ -15,8 +15,8 @@ namespace AdventOfCode
                 {
                     var output = Compute(input, i, j);
                     if (output[0] != 19690720) continue;
-                    output[1] = Compute(input, i, j)[1];
-                    output[2] = Compute(input, i, j)[2];
+                    var noun = output[1];
+                    var verb = output[2];
                     return;
                 }
             }
