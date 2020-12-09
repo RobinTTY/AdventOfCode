@@ -2,27 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Task4
+namespace AdventOfCode2020
 {
     static class Program
     {
         static void Main(string[] args)
         {
             var passports = new List<Passport>();
-
-            // parse a single passport
             var parsedInput = File.ReadAllLines("input.txt").ToList();
             var itemBreakIndex = 0;
 
             while (itemBreakIndex != -1)
             {
                 itemBreakIndex = parsedInput.FindIndex(match => match == "");
-                var passport = CreatePassportSimple(parsedInput.TakeWhile(line => line != ""));
+                var passport = CreatePassport(parsedInput.TakeWhile(line => line != ""));
 
                 if(passport != null)
                     passports.Add(passport);
@@ -37,7 +34,7 @@ namespace Task4
             
         }
 
-        private static Passport CreatePassportSimple(IEnumerable<string> passportString)
+        private static Passport CreatePassport(IEnumerable<string> passportString)
         {
             var passport = string.Join(",", string.Join(" ", passportString).Split(" ").Select(values => values.Split(":")
                 .Select(str => $"\"{str}\"")).Select(kvp => string.Join(":", kvp)));
