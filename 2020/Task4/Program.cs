@@ -19,7 +19,7 @@ namespace AdventOfCode2020
             while (itemBreakIndex != -1)
             {
                 itemBreakIndex = parsedInput.FindIndex(match => match == "");
-                var passport = CreatePassport(parsedInput.TakeWhile(line => line != ""));
+                var passport = CreatePassport(parsedInput.GetRange(0, itemBreakIndex));
 
                 if(passport != null)
                     passports.Add(passport);
@@ -31,7 +31,6 @@ namespace AdventOfCode2020
                 typeof(Passport).GetProperty("CountryId")).ToList().TrueForAll(prop => prop.GetValue(passport) != null)).ToList();
             Console.WriteLine($"For part one there are {result.Count} valid passports.");
             Console.WriteLine($"For part two there are {result.Count(passport => passport.IsValid())} valid passports.");
-            
         }
 
         private static Passport CreatePassport(IEnumerable<string> passportString)
