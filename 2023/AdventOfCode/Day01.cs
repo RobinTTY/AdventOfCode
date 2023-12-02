@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
 
-public class Day01 : BaseDay
+public partial class Day01 : BaseDay
 {
     private readonly IEnumerable<string> _input;
 
@@ -19,30 +20,30 @@ public class Day01 : BaseDay
 
     public override ValueTask<string> Solve_2()
     {
-        string[] validNumbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-        var cleanInput = new List<string>();
-        
-        _input.ToList().ForEach(line =>
-        {
-            var index = 0;
-            var indexOfNumbersInText = new int?[9];
-            
-            foreach (var validNumber in validNumbers)
-            {
-                var result = line.IndexOf(validNumber, StringComparison.Ordinal);
-                indexOfNumbersInText[index] = result == -1 ? null : result;
-                index++;
-            }
-
-            var newLine = line;
-            var min = Array.FindIndex(indexOfNumbersInText, i => i == indexOfNumbersInText.Min());
-            var max = Array.FindIndex(indexOfNumbersInText, i => i == indexOfNumbersInText.Max());
-            newLine = newLine.Replace(validNumbers[min], (min + 1).ToString());
-            newLine = newLine.Replace(validNumbers[max], (max + 1).ToString());
-            cleanInput.Add(newLine);
-        });
-        
-        var sum = cleanInput.Sum(line => int.Parse(string.Concat(line.First(char.IsDigit), line.Last(char.IsDigit))));
-        return new (sum.ToString(CultureInfo.InvariantCulture));
+        var rx = MyRegex(); 
+        return new (_input.Select(line => rx.Matches(line))
+            .Select(matches => (matches, outputLocal: MapValue(matches.First().Groups.Values.Last().Value) * 10))
+            .Select(t => t.outputLocal + MapValue(t.matches.Last().Groups.Values.Last().Value)).Sum().ToString());
     }
+
+    private static int MapValue(string input)
+    {
+        return input switch
+        {
+            "zero" => 0,
+            "one" => 1,
+            "two" => 2,
+            "three" => 3,
+            "four" => 4,
+            "five" => 5,
+            "six" => 6,
+            "seven" => 7,
+            "eight" => 8,
+            "nine" => 9,
+            _ => int.Parse(input)
+        };
+    }
+
+    [GeneratedRegex(@"(?=(one|two|three|four|five|six|seven|eight|nine|[1-9]))", RegexOptions.Compiled)]
+    private static partial Regex MyRegex();
 }
