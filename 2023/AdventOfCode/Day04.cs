@@ -13,16 +13,12 @@ public class Day04 : BaseDay
 
     public override ValueTask<string> Solve_1()
     {
-        return new (_input
-            .Select(line => line.Nums())
-            .Select(nums =>
-            {
-                var enumerable = nums as int[] ?? nums.ToArray();
-                return (enumerable.Skip(1).Take(10), enumerable.Skip(11));
-            })
-            .Select(pair => pair.Item1.Intersect(pair.Item2).Count())
-            .Select(val => val == 0 ? 0 : 1 << (val - 1))
-            .Sum().ToString());
+        var allNumbers = _input.Select(x => x.Split(':', '|').Skip(1).ToArray().Where(s => !string.IsNullOrEmpty(s))).ToArray();
+        var output = allNumbers
+            .Select(numbers => numbers.Select(number => number.Split(' ').Where(num => !string.IsNullOrEmpty(num)).Select(int.Parse).ToList()).ToList())
+            .Select(currentGame => currentGame.ElementAt(0).Intersect(currentGame.ElementAt(1)).Count())
+            .Select(currentWins => currentWins == 0 ? 0 : 1 << (currentWins - 1)).Sum();
+        return new ValueTask<string>(output.ToString());
     }
 
     public override ValueTask<string> Solve_2()
