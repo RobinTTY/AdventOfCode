@@ -117,8 +117,7 @@ public class Day03 : BaseDay
         return number;
     }
 
-    private bool IsWithinBounds(int row, int column) =>
-        row >= 0 && row < _schematic.Length && column >= 0 && column < _schematic[row].Length;
+    private bool IsWithinBounds(int row, int column) => row >= 0 && row < _schematic.Length && column >= 0 && column < _schematic[row].Length;
 
     private char[][] ParseSchematic() => _input.Select(x => x.ToCharArray()).ToArray();
 }
